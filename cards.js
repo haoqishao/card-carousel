@@ -25,7 +25,7 @@
     function genHeart(count) {
       const pts = [];
       const vw = window.innerWidth, vh = window.innerHeight;
-      const base = Math.min(vw, vh) * 0.40;  // 以较短边为基准
+      const base = Math.min(vw, vh) * 0.48;  // 以较短边为基准，放大爱心适配平板
       const cx = vw / 2, cy = vh * 0.46;      // 视觉上居中（心形偏下，上移4%）
       for (let i = 0; i < count; i++) {
         const t = (i / count) * 2 * Math.PI;
