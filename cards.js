@@ -21,10 +21,9 @@
     const card = document.createElement('div');
     card.className = 'card';
 
-    // 中心概率分布：越靠近中心概率越大，范围20%~80%
-    // 两个随机数平均产生钟形分布，映射到20-80
-    const left = ((Math.random() + Math.random()) / 2) * 60 + 20;
-    const top  = ((Math.random() + Math.random()) / 2) * 60 + 20;
+    // 强中心概率分布：三个随机数平均，强烈聚向中心50%，范围20%~80%
+    const left = ((Math.random() + Math.random() + Math.random()) / 3) * 60 + 20;
+    const top  = ((Math.random() + Math.random() + Math.random()) / 3) * 60 + 20;
 
     card.style.left = left + '%';
     card.style.top  = top  + '%';
