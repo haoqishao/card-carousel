@@ -17,7 +17,7 @@
 </head>
 <body>
 
-  <!-- 开始页面：直接显示，不用等待 -->
+  <!-- 开始页面 -->
   <div id="start-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);cursor:pointer;-webkit-tap-highlight-color:transparent;">
     <div style="font-size:4rem;margin-bottom:1rem;">♥</div>
     <div style="font-size:1.6rem;font-weight:300;letter-spacing:4px;">给 璇璇</div>
@@ -35,8 +35,18 @@
     (function(){
       var bgm = document.getElementById('bgm');
       var startScreen = document.getElementById('start-screen');
+      var status = startScreen.lastElementChild;
       var started = false;
       function launch() {
+        if (started) return;
+        if (bgm.readyState < 3) {
+          status.textContent = '♪ 加载中...';
+          bgm.addEventListener('canplaythrough', startNow, { once: true });
+          return;
+        }
+        startNow();
+      }
+      function startNow() {
         if (started) return;
         started = true;
         bgm.play().catch(function(){});
@@ -45,7 +55,6 @@
         startScreen.style.opacity = '0';
         setTimeout(function(){ startScreen.style.display = 'none'; }, 550);
       }
-      // 只有用户点击才启动，不自动触发（防微信重入闪退）
       startScreen.addEventListener('click', launch);
       document.addEventListener('keydown', function(e){ if (e.key === 'Enter') launch(); });
     })();
