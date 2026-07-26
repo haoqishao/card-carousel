@@ -60,7 +60,7 @@
     const data = cards[index % cards.length];
     index++;
     showCard(data);
-    setTimeout(next, 200); // 0.2秒出一张
+    setTimeout(next, 100); // 0.1秒出一张
   }
 
   setTimeout(next, 300);
