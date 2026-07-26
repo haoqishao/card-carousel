@@ -1,5 +1,6 @@
 /**
- * 文字卡片轮播 - 单张满屏停留3秒
+ * 文字卡片轮播 - 聚拢浮现
+ * 新卡片在上一次浮现的卡片周围出现
  */
 
 (async function () {
@@ -14,15 +15,21 @@
 
   const container = document.getElementById('card-container');
   let index = 0;
+  let lastX = 40, lastY = 40; // 初始屏幕中心偏一点
   const MAX_CARDS = 60;
 
   function showCard(data) {
     const card = document.createElement('div');
     card.className = 'card';
 
-    // 满屏随机
-    card.style.left = (Math.random() * 82) + '%';
-    card.style.top  = (Math.random() * 82) + '%';
+    // 在上一次位置周围 ±15% 范围内随机
+    const left = Math.max(0, Math.min(82, lastX + (Math.random() - 0.5) * 30));
+    const top  = Math.max(0, Math.min(82, lastY + (Math.random() - 0.5) * 30));
+    lastX = left;
+    lastY = top;
+
+    card.style.left = left + '%';
+    card.style.top  = top  + '%';
 
     let html = '';
     if (data.emoji) html += '<span class="emoji">' + data.emoji + '</span>';
@@ -60,7 +67,7 @@
     const data = cards[index % cards.length];
     index++;
     showCard(data);
-    setTimeout(next, 100); // 0.1秒出一张
+    setTimeout(next, 100);
   }
 
   setTimeout(next, 300);
