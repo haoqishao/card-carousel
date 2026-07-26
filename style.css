@@ -4,9 +4,9 @@
    ============================================ */
 
 :root {
-  /* === 页面背景（可替换为自己的背景色/渐变） === */
-  --bg-color: #0f0f1a;
-  --bg-gradient: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+  /* === 页面背景 === */
+  --bg-image: url('bg.jpg');
+  --bg-size: cover;
 
   /* === 卡片样式 === */
   --card-bg: rgba(255, 255, 255, 0.06);
@@ -35,8 +35,9 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
-  background: var(--bg-gradient);
-  background-attachment: fixed;
+  background-image: var(--bg-image);
+  background-size: var(--bg-size);
+  background-position: center;
   color: var(--text-color);
   -webkit-font-smoothing: antialiased;
   user-select: none;
