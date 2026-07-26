@@ -1,5 +1,5 @@
 /**
- * 文字卡片轮播 - 每次三张齐发
+ * 文字卡片轮播 - 满屏版
  */
 
 (async function () {
@@ -14,14 +14,15 @@
 
   const container = document.getElementById('card-container');
   let index = 0;
-  const MAX_CARDS = 30;
+  const MAX_CARDS = 60;
 
   function showCard(data, delay) {
     const card = document.createElement('div');
     card.className = 'card';
 
-    card.style.left = (Math.random() * 60 + 5) + '%';
-    card.style.top  = (Math.random() * 60 + 8) + '%';
+    // 满屏随机位置：0~85% 覆盖整个屏幕
+    card.style.left = (Math.random() * 82) + '%';
+    card.style.top  = (Math.random() * 82) + '%';
 
     let html = '';
     if (data.emoji) html += '<span class="emoji">' + data.emoji + '</span>';
@@ -56,14 +57,14 @@
   }
 
   function showBatch() {
-    // 一次出3张，每张间隔50ms错开
-    for (let i = 0; i < 3; i++) {
+    // 一次出6张，更快填满屏幕
+    for (let i = 0; i < 6; i++) {
       const data = cards[index % cards.length];
       index++;
-      showCard(data, i * 50);
+      showCard(data, i * 40);
     }
-    // 每0.5秒出一批
-    setTimeout(showBatch, 500);
+    // 每0.4秒出一批
+    setTimeout(showBatch, 400);
   }
 
   setTimeout(showBatch, 300);
