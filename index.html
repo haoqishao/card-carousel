@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="style.css?v=14">
 
   <!-- ⭐ 背景音乐 ⭐ -->
-  <audio id="bgm" loop preload="auto">
+  <audio id="bgm" preload="auto">
     <source src="bgm.mp4" type="audio/mp4">
   </audio>
 </head>
@@ -50,6 +50,7 @@
         if (started) return;
         started = true;
         bgm.play().catch(function(){});
+        bgm.addEventListener('ended', function(){ bgm.currentTime = 0; bgm.play().catch(function(){}); });
         if (typeof window.startCards === 'function') window.startCards();
         startScreen.style.transition = 'opacity 0.5s ease';
         startScreen.style.opacity = '0';
