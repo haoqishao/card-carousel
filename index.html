@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>给你的小卡片</title>
-  <link rel="stylesheet" href="style.css?v=11">
+  <link rel="stylesheet" href="style.css?v=12">
 
   <!-- ⭐ 背景音乐 ⭐ -->
   <audio id="bgm" loop preload="auto">
@@ -24,12 +24,32 @@
 
   <script src="cards.js?v=5"></script>
   <script>
-    // 用户首次点击页面时自动播放音乐
-    document.addEventListener('click', function play() {
-      var bgm = document.getElementById('bgm');
-      if (bgm) { bgm.play().catch(function(){}); }
-      document.removeEventListener('click', play);
-    }, { once: true });
+    var bgm = document.getElementById('bgm');
+    function tryPlay() {
+      if (!bgm) return;
+      bgm.play().then(function(){
+        var btn = document.getElementById('playbtn');
+        if (btn) btn.style.display = 'none';
+      }).catch(function(){});
+    }
+    // 微信 JSBridge 初始化时自动播放
+    if (typeof WeixinJSBridge !== 'undefined') {
+      WeixinJSBridge.invoke('getNetworkType', {}, tryPlay);
+    }
+    // 用户首次触摸/点击页面时播放
+    document.addEventListener('touchstart', tryPlay, { once: true });
+    document.addEventListener('click', tryPlay, { once: true });
+    // 如果以上都失败，显示播放按钮
+    setTimeout(function(){
+      if (bgm && bgm.paused) {
+        var btn = document.createElement('div');
+        btn.id = 'playbtn';
+        btn.textContent = '🎵 点击播放音乐';
+        btn.style.cssText = 'position:fixed;bottom:3.5rem;left:50%;transform:translateX(-50%);z-index:99;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:2rem;padding:0.6rem 1.2rem;color:#f0f0f5;font-size:0.85rem;cursor:pointer;white-space:nowrap';
+        document.body.appendChild(btn);
+        btn.addEventListener('click', function(){ tryPlay(); });
+      }
+    }, 2000);
   </script>
 </body>
 </html>
