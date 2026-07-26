@@ -20,9 +20,9 @@
   --emoji-font-size: 2.8rem;
 
   /* === 动画控制 === */
-  --card-appear-duration: 1.2s;
-  --card-disappear-duration: 1.5s;
-  --card-hold-duration: 2.5s;
+  --card-appear-duration: 2s;
+  --card-disappear-duration: 3s;
+  --card-hold-duration: 4s;
   --card-min-scale: 0.05;
   --card-max-scale: 1;
 }
