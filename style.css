@@ -22,7 +22,7 @@
   /* === 动画控制 === */
   --card-appear-duration: 0.2s;
   --card-disappear-duration: 1.5s;
-  --card-hold-duration: 3s;
+  --card-hold-duration: 0.5s;
   --card-min-scale: 0.05;
   --card-max-scale: 1;
 }
