@@ -1,6 +1,6 @@
 /**
- * 文字卡片轮播 - 中心聚集
- * 越靠近屏幕中心概率越大，范围20%~80%
+ * 文字卡片轮播 - 五锚点聚集
+ * 中心 + 四角区块中心，五个概率最高点，向周围递减
  */
 
 (async function () {
@@ -21,9 +21,12 @@
     const card = document.createElement('div');
     card.className = 'card';
 
-    // 强中心概率分布：三个随机数平均，强烈聚向中心50%，范围20%~80%
-    const left = ((Math.random() + Math.random() + Math.random()) / 3) * 60 + 20;
-    const top  = ((Math.random() + Math.random() + Math.random()) / 3) * 60 + 20;
+    // 五锚点高斯分布：中心(50,50) + 四角区块中心(25,25)(75,25)(25,75)(75,75)
+    const anchors = [[50,50], [25,25], [75,25], [25,75], [75,75]];
+    const anchor = anchors[Math.floor(Math.random() * 5)];
+    const offset = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 28;
+    const left = Math.max(1, Math.min(99, anchor[0] + offset));
+    const top  = Math.max(1, Math.min(99, anchor[1] + offset));
 
     card.style.left = left + '%';
     card.style.top  = top  + '%';
