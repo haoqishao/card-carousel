@@ -16,15 +16,12 @@
 </head>
 <body>
 
-  <!-- 点击开始页面 -->
-  <div id="start-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);cursor:pointer;-webkit-tap-highlight-color:transparent;">
-    <div style="font-size:4rem;margin-bottom:1rem;opacity:0;animation:fadeIn 1s ease 0.3s forwards;">♥</div>
-    <div style="font-size:1.6rem;font-weight:300;letter-spacing:4px;opacity:0;animation:fadeIn 1s ease 0.8s forwards;">给 璇璇</div>
-    <div style="font-size:0.85rem;margin-top:0.6rem;opacity:0;animation:fadeIn 1s ease 1.3s forwards;">～ 点一下开始 ～</div>
+  <!-- 点击开始页面（初始隐藏，load后渐入） -->
+  <div id="start-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);cursor:pointer;-webkit-tap-highlight-color:transparent;opacity:0;transition:opacity 0.6s ease;">
+    <div style="font-size:4rem;margin-bottom:1rem;">♥</div>
+    <div style="font-size:1.6rem;font-weight:300;letter-spacing:4px;">给 璇璇</div>
+    <div style="font-size:0.85rem;margin-top:0.6rem;">～ 点一下开始 ～</div>
   </div>
-  <style>
-    @keyframes fadeIn { to { opacity:1; } }
-  </style>
 
   <!-- 卡片叠加层 -->
   <div id="card-container"></div>
@@ -43,14 +40,19 @@
         started = true;
         bgm.play().catch(function(){});
         if (typeof window.startCards === 'function') window.startCards();
-        startScreen.style.transition = 'opacity 0.5s ease';
         startScreen.style.opacity = '0';
-        setTimeout(function(){ startScreen.style.display = 'none'; }, 550);
+        setTimeout(function(){ startScreen.style.display = 'none'; }, 650);
       }
-      document.addEventListener('WeixinJSBridgeReady', launch, false);
-      startScreen.addEventListener('click', launch);
-      startScreen.addEventListener('touchstart', launch);
-      document.addEventListener('keydown', function(e){ if (e.key === 'Enter') launch(); });
+      // 页面完全加载后再显示开始页，防止手机闪退
+      function ready() {
+        startScreen.style.visibility = 'visible';
+        startScreen.style.opacity = '1';
+        startScreen.addEventListener('click', launch);
+        document.addEventListener('keydown', function(e){ if (e.key === 'Enter') launch(); });
+        document.addEventListener('WeixinJSBridgeReady', launch, false);
+      }
+      if (document.readyState === 'complete') ready();
+      else window.addEventListener('load', ready);
     })();
   </script>
 </body>
