@@ -1,6 +1,6 @@
 /**
- * 文字卡片轮播 - 聚拢浮现
- * 新卡片在上一次浮现的卡片周围出现
+ * 文字卡片轮播 - 中心聚集
+ * 越靠近屏幕中心概率越大，范围20%~80%
  */
 
 (async function () {
@@ -15,18 +15,16 @@
 
   const container = document.getElementById('card-container');
   let index = 0;
-  let lastX = 40, lastY = 40; // 初始屏幕中心偏一点
   const MAX_CARDS = 60;
 
   function showCard(data) {
     const card = document.createElement('div');
     card.className = 'card';
 
-    // 在上一次位置周围 ±15% 范围内随机
-    const left = Math.max(0, Math.min(82, lastX + (Math.random() - 0.5) * 30));
-    const top  = Math.max(0, Math.min(82, lastY + (Math.random() - 0.5) * 30));
-    lastX = left;
-    lastY = top;
+    // 中心概率分布：越靠近中心概率越大，范围20%~80%
+    // 两个随机数平均产生钟形分布，映射到20-80
+    const left = ((Math.random() + Math.random()) / 2) * 60 + 20;
+    const top  = ((Math.random() + Math.random()) / 2) * 60 + 20;
 
     card.style.left = left + '%';
     card.style.top  = top  + '%';
