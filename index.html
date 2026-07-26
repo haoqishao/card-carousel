@@ -11,6 +11,10 @@
 </head>
 <body>
 
+  <audio id="bgm" loop preload="auto">
+    <source src="bgm.mp4" type="audio/mp4">
+  </audio>
+
   <!-- 开始页面 -->
   <div id="start-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);cursor:pointer;-webkit-tap-highlight-color:transparent;">
     <div style="font-size:4rem;margin-bottom:1rem;">♥</div>
@@ -18,50 +22,23 @@
     <div style="font-size:0.85rem;margin-top:0.6rem;">～ 点一下开始 ～</div>
   </div>
 
-  <!-- 卡片叠加层 -->
   <div id="card-container"></div>
   <div id="hint">❤</div>
 
   <script src="cards.js?t=3"></script>
   <script>
-    (function(){
-      var ss = document.getElementById('start-screen');
-      var status = ss.lastElementChild;
-      var started = false;
-      var buf = null;  // 解码后的音频
-      var loading = false;
-
-      // 页面加载后立即下载音频
-      fetch('bgm.mp4').then(function(r){ return r.arrayBuffer(); }).then(function(raw){
-        var ctx = new (window.AudioContext || window.webkitAudioContext)();
-        return new Promise(function(ok){ ctx.decodeAudioData(raw, ok); });
-      }).then(function(b){
-        buf = b;
-        if (!loading) status.textContent = '～ 点一下开始 ～';
-      });
-
-      function launch() {
-        if (started) return;
-        if (!buf) {
-          loading = true;
-          status.textContent = '♪ 加载中...';
-          return;
-        }
-        started = true;
-        var ctx = new (window.AudioContext || window.webkitAudioContext)();
-        var src = ctx.createBufferSource();
-        src.buffer = buf;
-        src.loop = true;
-        src.connect(ctx.destination);
-        src.start(0);
-        if (typeof window.startCards === 'function') window.startCards();
-        ss.style.transition = 'opacity 0.5s ease';
-        ss.style.opacity = '0';
-        setTimeout(function(){ ss.style.display = 'none'; }, 550);
-      }
-      ss.addEventListener('click', launch);
-      document.addEventListener('keydown', function(e){ if (e.key === 'Enter') launch(); });
-    })();
+    var bgm = document.getElementById('bgm');
+    var ss = document.getElementById('start-screen');
+    var started = false;
+    ss.addEventListener('click', function(){
+      if (started) return;
+      started = true;
+      bgm.play().catch(function(){});
+      if (typeof window.startCards === 'function') window.startCards();
+      ss.style.transition = 'opacity 0.5s ease';
+      ss.style.opacity = '0';
+      setTimeout(function(){ ss.style.display = 'none'; }, 550);
+    });
   </script>
 </body>
 </html>
