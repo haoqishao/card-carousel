@@ -1,6 +1,5 @@
 /**
- * 文字卡片轮播 - 极速版
- * 卡片嗖嗖浮现 → 快速缩小消失 → 眼花缭乱
+ * 文字卡片轮播 - 每次三张齐发
  */
 
 (async function () {
@@ -15,9 +14,9 @@
 
   const container = document.getElementById('card-container');
   let index = 0;
-  const MAX_CARDS = 15;
+  const MAX_CARDS = 30;
 
-  function showCard(data) {
+  function showCard(data, delay) {
     const card = document.createElement('div');
     card.className = 'card';
 
@@ -34,13 +33,13 @@
     container.appendChild(card);
 
     card.offsetHeight;
-    requestAnimationFrame(() => {
+    setTimeout(() => {
       card.style.transition = 'transform 0.1s ease-out, opacity 0.08s ease-out';
       card.style.transform = 'scale(1)';
       card.style.opacity = '1';
-    });
+    }, delay);
 
-    // 0.6秒后缩小消失
+    const life = 600 + delay;
     setTimeout(() => {
       card.style.transition = 'transform 0.4s ease-in, opacity 0.4s ease-in';
       card.style.transform = 'scale(0.01)';
@@ -48,7 +47,7 @@
       setTimeout(() => {
         if (card.parentNode) card.parentNode.removeChild(card);
       }, 450);
-    }, 600);
+    }, life);
 
     while (container.children.length > MAX_CARDS) {
       const old = container.firstChild;
@@ -56,12 +55,16 @@
     }
   }
 
-  function next() {
-    const data = cards[index % cards.length];
-    index++;
-    showCard(data);
-    setTimeout(next, 150); // 0.15秒出一张
+  function showBatch() {
+    // 一次出3张，每张间隔50ms错开
+    for (let i = 0; i < 3; i++) {
+      const data = cards[index % cards.length];
+      index++;
+      showCard(data, i * 50);
+    }
+    // 每0.5秒出一批
+    setTimeout(showBatch, 500);
   }
 
-  setTimeout(next, 150);
+  setTimeout(showBatch, 300);
 })();
