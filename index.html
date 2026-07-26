@@ -45,12 +45,7 @@
         startScreen.style.opacity = '0';
         setTimeout(function(){ startScreen.style.display = 'none'; }, 550);
       }
-      // 微信 JS Bridge：已就绪直接启动，否则等待事件
-      if (typeof WeixinJSBridge !== 'undefined') {
-        setTimeout(launch, 100);
-      } else {
-        document.addEventListener('WeixinJSBridgeReady', launch, false);
-      }
+      // 只有用户点击才启动，不自动触发（防微信重入闪退）
       startScreen.addEventListener('click', launch);
       document.addEventListener('keydown', function(e){ if (e.key === 'Enter') launch(); });
     })();
