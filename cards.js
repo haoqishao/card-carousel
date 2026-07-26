@@ -1,6 +1,6 @@
 /**
- * 文字卡片轮播 - 五锚点聚集
- * 中心 + 四角区块中心，五个概率最高点，向周围递减
+ * 文字卡片轮播 - 爱心锚点聚集
+ * 16个锚点沿心形轮廓分布，高斯偏移形成爱心云
  */
 
 (async function () {
@@ -21,10 +21,20 @@
     const card = document.createElement('div');
     card.className = 'card';
 
-    // 五锚点高斯分布：中心(50,50) + 四角区块中心(25,25)(75,25)(25,75)(75,75)
-    const anchors = [[50,50], [25,25], [75,25], [25,75], [75,75]];
-    const anchor = anchors[Math.floor(Math.random() * 5)];
-    const offset = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 28;
+    // 爱心形状锚点：16个点沿心形轮廓分布
+    function genHeart(count) {
+      const pts = [];
+      for (let i = 0; i < count; i++) {
+        const t = (i / count) * 2 * Math.PI;
+        const sx = 16 * Math.pow(Math.sin(t), 3);
+        const sy = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+        pts.push([50 + 2.0 * sx, 50 - 2.0 * sy]);  // 翻转y使心尖朝下
+      }
+      return pts;
+    }
+    const heartAnchors = genHeart(16);
+    const anchor = heartAnchors[Math.floor(Math.random() * 16)];
+    const offset = ((Math.random() + Math.random() + Math.random()) / 3 - 0.5) * 14;
     const left = Math.max(1, Math.min(99, anchor[0] + offset));
     const top  = Math.max(1, Math.min(99, anchor[1] + offset));
 
