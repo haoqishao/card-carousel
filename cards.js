@@ -28,7 +28,7 @@
         const t = (i / count) * 2 * Math.PI;
         const sx = 16 * Math.pow(Math.sin(t), 3);
         const sy = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-        pts.push([50 + 2.0 * sx, 50 - 2.0 * sy]);  // 翻转y使心尖朝下
+        pts.push([38 + 2.0 * sx, 35 - 2.0 * sy]);  // 偏左上角，翻转y使心尖朝下
       }
       return pts;
     }
@@ -57,7 +57,7 @@
       card.style.opacity = '1';
     });
 
-    // 5秒后缩小消失
+    // 6秒后缩小消失
     setTimeout(() => {
       card.style.transition = 'transform 0.5s ease-in, opacity 0.5s ease-in';
       card.style.transform = 'scale(0.01)';
@@ -65,7 +65,7 @@
       setTimeout(() => {
         if (card.parentNode) card.parentNode.removeChild(card);
       }, 550);
-    }, 5000);
+    }, 6000);
 
     while (container.children.length > MAX_CARDS) {
       const old = container.firstChild;
