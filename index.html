@@ -24,32 +24,43 @@
 
   <script src="cards.js?v=6"></script>
   <script>
-    var bgm = document.getElementById('bgm');
-    function tryPlay() {
-      if (!bgm) return;
-      bgm.play().then(function(){
-        var btn = document.getElementById('playbtn');
-        if (btn) btn.style.display = 'none';
-      }).catch(function(){});
-    }
-    // 微信 JSBridge 初始化时自动播放
-    if (typeof WeixinJSBridge !== 'undefined') {
-      WeixinJSBridge.invoke('getNetworkType', {}, tryPlay);
-    }
-    // 用户首次触摸/点击页面时播放
-    document.addEventListener('touchstart', tryPlay, { once: true });
-    document.addEventListener('click', tryPlay, { once: true });
-    // 如果以上都失败，显示播放按钮
-    setTimeout(function(){
-      if (bgm && bgm.paused) {
-        var btn = document.createElement('div');
-        btn.id = 'playbtn';
-        btn.textContent = '🎵 点击播放音乐';
-        btn.style.cssText = 'position:fixed;bottom:3.5rem;left:50%;transform:translateX(-50%);z-index:99;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:2rem;padding:0.6rem 1.2rem;color:#f0f0f5;font-size:0.85rem;cursor:pointer;white-space:nowrap';
-        document.body.appendChild(btn);
-        btn.addEventListener('click', function(){ tryPlay(); });
+    (function(){
+      var bgm = document.getElementById('bgm');
+      function tryPlay() {
+        if (!bgm || !bgm.paused) return;
+        bgm.play().then(function(){
+          var btn = document.getElementById('playbtn');
+          if (btn) btn.style.display = 'none';
+        }).catch(function(){});
       }
-    }, 2000);
+      // 1. 立即尝试
+      tryPlay();
+      // 2. 微信 JS Bridge 就绪事件（微信内自动播放的关键）
+      document.addEventListener('WeixinJSBridgeReady', tryPlay, false);
+      // 3. 页面加载完成后重试
+      window.addEventListener('load', function(){ setTimeout(tryPlay, 300); });
+      // 4. 每隔 0.5 秒重试，最多 5 秒（等音频文件加载完毕）
+      var retries = 0;
+      var timer = setInterval(function(){
+        retries++;
+        if (retries > 10) { clearInterval(timer); return; }
+        tryPlay();
+      }, 500);
+      // 5. 用户触摸/点击回退
+      document.addEventListener('touchstart', tryPlay, { once: true });
+      document.addEventListener('click', tryPlay, { once: true });
+      // 6. 兜底按钮
+      setTimeout(function(){
+        if (bgm && bgm.paused) {
+          var btn = document.createElement('div');
+          btn.id = 'playbtn';
+          btn.textContent = '🎵 点击播放音乐';
+          btn.style.cssText = 'position:fixed;bottom:3.5rem;left:50%;transform:translateX(-50%);z-index:99;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:2rem;padding:0.6rem 1.2rem;color:#f0f0f5;font-size:0.85rem;cursor:pointer;white-space:nowrap';
+          document.body.appendChild(btn);
+          btn.addEventListener('click', function(){ tryPlay(); });
+        }
+      }, 3000);
+    })();
   </script>
 </body>
 </html>
