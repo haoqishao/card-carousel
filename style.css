@@ -5,7 +5,7 @@
 
 :root {
   /* === 页面背景 === */
-  --bg-image: url('bg.jpg');
+  --bg-image: url('bg.png');
   --bg-size: cover;
 
   /* === 卡片样式 === */
