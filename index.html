@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>给你的小卡片</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- ⭐ 背景音乐接口 ⭐
+       后续用户提供音乐后，将 mp3 文件放入同目录，
+       修改下面 source 的 src 路径即可自动播放 -->
+  <!--
+  <audio id="bgm" loop preload="auto">
+    <source src="bgm.mp3" type="audio/mpeg">
+  </audio>
+  -->
+</head>
+<body>
+
+  <!-- 卡片叠加层 -->
+  <div id="card-container"></div>
+
+  <!-- 底部提示 -->
+  <div id="hint">❤</div>
+
+  <script src="cards.js"></script>
+</body>
+</html>
