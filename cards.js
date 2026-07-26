@@ -47,7 +47,7 @@
       card.style.opacity = '1';
     });
 
-    // 3秒后缩小消失
+    // 5秒后缩小消失
     setTimeout(() => {
       card.style.transition = 'transform 0.5s ease-in, opacity 0.5s ease-in';
       card.style.transform = 'scale(0.01)';
@@ -55,7 +55,7 @@
       setTimeout(() => {
         if (card.parentNode) card.parentNode.removeChild(card);
       }, 550);
-    }, 3000);
+    }, 5000);
 
     while (container.children.length > MAX_CARDS) {
       const old = container.firstChild;
