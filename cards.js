@@ -21,14 +21,19 @@
     const card = document.createElement('div');
     card.className = 'card';
 
-    // 爱心形状锚点：24个点沿心形轮廓分布
+    // 爱心形状锚点：按屏幕像素比例生成，任何屏幕都显示正圆爱心
     function genHeart(count) {
       const pts = [];
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const base = Math.min(vw, vh) * 0.40;  // 以较短边为基准
+      const cx = vw / 2, cy = vh * 0.46;      // 视觉上居中（心形偏下，上移4%）
       for (let i = 0; i < count; i++) {
         const t = (i / count) * 2 * Math.PI;
         const sx = 16 * Math.pow(Math.sin(t), 3);
         const sy = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-        pts.push([50 + 2.0 * sx, 50 - 2.0 * sy]);  // 屏幕居中，翻转y使心尖朝下
+        const px = cx + (base / 16) * sx;
+        const py = cy - (base / 16) * sy;      // 翻转y使心尖朝下
+        pts.push([(px / vw) * 100, (py / vh) * 100]);
       }
       return pts;
     }
