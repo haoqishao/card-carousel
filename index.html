@@ -7,16 +7,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>给你的小卡片</title>
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
 
-  <!-- ⭐ 背景音乐接口 ⭐
-       后续用户提供音乐后，将 mp3 文件放入同目录，
-       修改下面 source 的 src 路径即可自动播放 -->
-  <!--
+  <!-- ⭐ 背景音乐 ⭐ -->
   <audio id="bgm" loop preload="auto">
-    <source src="bgm.mp3" type="audio/mpeg">
+    <source src="bgm.mp4" type="audio/mp4">
   </audio>
-  -->
 </head>
 <body>
 
@@ -26,6 +22,14 @@
   <!-- 底部提示 -->
   <div id="hint">❤</div>
 
-  <script src="cards.js?v=2"></script>
+  <script src="cards.js?v=3"></script>
+  <script>
+    // 用户首次点击页面时自动播放音乐
+    document.addEventListener('click', function play() {
+      var bgm = document.getElementById('bgm');
+      if (bgm) { bgm.play().catch(function(){}); }
+      document.removeEventListener('click', play);
+    }, { once: true });
+  </script>
 </body>
 </html>
